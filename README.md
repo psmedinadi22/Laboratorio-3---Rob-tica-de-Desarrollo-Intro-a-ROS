@@ -7,6 +7,7 @@ El siguiente documento contiene el desarrollo de la guia de laboratorio 3 de Rob
 
 
 **Script en MATLAB computer**
+
 Lo primero que se nos pide es abrir 2 terminales en Ubuntu para esto se da click izquierdo en el simbolo de terminal de la barra de tareas 2 veces, posterior a esto se escribe en la primera terminal el comando de roscore para iniciar el nodo maestro.
 Una vez iniciado el nodo maestro se escribe en la segunda terminal el comando rosrun turtlesim turtlesim_node el cual se introduce para correr turtlesim
 <p align="center"><img height=350 src="1.png" alt="1" /></p>
@@ -55,6 +56,7 @@ Al anterior procedimiento se le agrega el atributo de rotación, para evidenciar
 
 
 **Script en Python snake**
+
 El codigo desarrollado para operar una tortuga del paquete turtlesim con el teclado es el siguiente:
 
       from pynput import keyboard
