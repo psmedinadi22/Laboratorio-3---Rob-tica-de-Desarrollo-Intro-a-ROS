@@ -10,7 +10,7 @@ El siguiente documento contiene el desarrollo de la guia de laboratorio 3 de Rob
 
 Lo primero que se nos pide es abrir 2 terminales en Ubuntu para esto se da click izquierdo en el simbolo de terminal de la barra de tareas 2 veces, posterior a esto se escribe en la primera terminal el comando de roscore para iniciar el nodo maestro.
 Una vez iniciado el nodo maestro se escribe en la segunda terminal el comando rosrun turtlesim turtlesim_node el cual se introduce para correr turtlesim
-<p align="center"><img height=350 src="1.png" alt="1" /></p>
+<p align="center"><img height=350 src="Imagenes/1.png" alt="1" /></p>
 
 Una vez abierta una instacia de matlab para linux se introduce el codigo propuesto por la guia con el cual se busca realizar un conexion con el nodo maestro, definir un publicador y posteriormente manipular este publicador para poder enviar un comando a TurtleSim. Como se muestra acontinuacion:
 
@@ -43,15 +43,15 @@ Una vez abierta una instacia de matlab para linux se introduce el codigo propues
          rosshutdown
 
 Para recibir un mensaje de turtlesim lo primero que se realiza es la suscripcion al nodo de TurtleSim para poder recibir datos, esto se hace mediante la funcion rossubscriber cuyos argumentos son los datos que se desean recibir, que en este caso son los provenientes de turtle1 acerca de la posicion /turtle1/pose, y el segundo argumento es el tipo de mensaje que se va a recibir, de forma general tendra la estructura de la posicion proveniente de TurtleSim /TurtleSim/pose. 
-<p align="center"><img height=350 src="2.png" alt="2" /></p>
+<p align="center"><img height=350 src="Imagenes/2.png" alt="2" /></p>
 
 A continuación se utiliza la función TurtleTeleport para asignar posiciones arbitrarias a la tortuga por medio de los atributos TurtleMsg.X y TurtleMsg.Y. Posteriormente se realiza el llamado a la función Teleport enviándole como argumento los atributos asignados en TurtleMsg.
 
-<p align="center"><img height=350 src="3.png" alt="3" /></p>
+<p align="center"><img height=350 src="Imagenes/3.png" alt="3" /></p>
 
 Al anterior procedimiento se le agrega el atributo de rotación, para evidenciar cómo sería un cambio de posición no solo con respecto a los ejes sino también de la orientación angular de la tortuga:
 
-<p align="center"><img height=350 src="4.png" alt="4" /></p>
+<p align="center"><img height=350 src="Imagenes/4.png" alt="4" /></p>
 
 
 
