@@ -1,170 +1,121 @@
-# Laboratorio-3---Rob-tica-de-Desarrollo-Intro-a-ROS
-Desarrollo de la guia de laboratorio 3 de Robotica
+# Laboratorio 3 - Robótica de Desarrollo, Intro a ROS
+**Paula Sofía Medina Díaz**
 
-Script en MATLAB computer
+**Universidad Nacional de Colombia**
 
+El siguiente documento contiene el desarrollo de la guia de laboratorio 3 de Robotica
+
+
+**Script en MATLAB computer**
 Lo primero que se nos pide es abrir 2 terminales en Ubuntu para esto se da click izquierdo en el simbolo de terminal de la barra de tareas 2 veces, posterior a esto se escribe en la primera terminal el comando de roscore para iniciar el nodo maestro.
-1 Una vez iniciado el nodo maestro se escribe en la segunda terminal el comando rosrun turtlesim turtlesim_node el cual se introduce para correr turtlesim 2 Una vez abierta una instacia de matlab para linux se introduce el codigo propuesto por la guia con el cual se busca realizar un conexion con el nodo maestro, definir un publicador y posteriormente manipular este publicador para poder enviar un comando a TurtleSim. Como se muestra acontinuacion:
+Una vez iniciado el nodo maestro se escribe en la segunda terminal el comando rosrun turtlesim turtlesim_node el cual se introduce para correr turtlesim
+<p align="center"><img height=350 src="1.png" alt="1" /></p>
+
+Una vez abierta una instacia de matlab para linux se introduce el codigo propuesto por la guia con el cual se busca realizar un conexion con el nodo maestro, definir un publicador y posteriormente manipular este publicador para poder enviar un comando a TurtleSim. Como se muestra acontinuacion:
 
          %% INICIAL
-
          rosinit; %Conexion con nodo maestro
 
          %%
-
          velPub = rospublisher('/turtle1/cmd_vel','geometry_msgs/Twist'); %Creacion publicador
-
          velMsg = rosmessage(velPub); %Creacion de mensaje
 
          %%
-
          velMsg.Linear.X = 1; %Valor del mensaje
-
          send(velPub,velMsg); %Envio
-
          pause(1)
 
          %% SUBSCRIBER
-
          TurtlePose = rossubscriber("/turtle1/pose", "turtlesim/Pose")
-
          scanMsg = TurtlePose.LatestMessage
 
          %% POSE
-
          TurtleTeleport = rossvcclient("/turtle1/teleport_absolute")
-
          waitForServer(TurtleTeleport);
-
          TurtleMsg = rosmessage(TurtleTeleport)
-
          TurtleMsg.X = 5;
-
          TurtleMsg.Y = 3;
-
          TurtleMsg.Theta = 2*pi/3 ;
-
          call(TurtleTeleport,TurtleMsg)
 
          %% FINALIZAR NODO MAESTRO
          rosshutdown
 
-Para recibir un mensaje de turtlesim lo primero que se realiza es la suscripcion al nodo de TurtleSim para poder recibir datos, esto se hace mediante la funcion rossubscriber cuyos argumentos son los datos que se desean recibir, que en este caso son los provenientes de turtle1 acerca de la posicion /turtle1/pose, y el segundo argumento es el tipo de mensaje que se va a recibir, de forma general tendra la estructura de la posicion proveniente de TurtleSim /TurtleSim/pose. 3
+Para recibir un mensaje de turtlesim lo primero que se realiza es la suscripcion al nodo de TurtleSim para poder recibir datos, esto se hace mediante la funcion rossubscriber cuyos argumentos son los datos que se desean recibir, que en este caso son los provenientes de turtle1 acerca de la posicion /turtle1/pose, y el segundo argumento es el tipo de mensaje que se va a recibir, de forma general tendra la estructura de la posicion proveniente de TurtleSim /TurtleSim/pose. 
+<p align="center"><img height=350 src="2.png" alt="2" /></p>
 
 A continuación se utiliza la función TurtleTeleport para asignar posiciones arbitrarias a la tortuga por medio de los atributos TurtleMsg.X y TurtleMsg.Y. Posteriormente se realiza el llamado a la función Teleport enviándole como argumento los atributos asignados en TurtleMsg.
 
-4
+<p align="center"><img height=350 src="3.png" alt="3" /></p>
 
 Al anterior procedimiento se le agrega el atributo de rotación, para evidenciar cómo sería un cambio de posición no solo con respecto a los ejes sino también de la orientación angular de la tortuga:
 
-5
+<p align="center"><img height=350 src="4.png" alt="4" /></p>
 
-A continuación se muestra un animación del movimiento de la tortuga al usar la función TurtleTeleport:
 
-Script en Python snake
 
+**Script en Python snake**
 El codigo desarrollado para operar una tortuga del paquete turtlesim con el teclado es el siguiente:
 
       from pynput import keyboard
-      
       import rospy
-      
       import roslaunch
-      
       from geometry_msgs.msg import Twist
-
       from turtlesim.srv import TeleportAbsolute, TeleportRelative
-
       import termios, sys, os
-
       from numpy import pi
-
       from std_srvs.srv import Empty
 
       rospy.init_node('TeleopKey', anonymous=True)
-
       def pubVel(speed, angspeed, t):
-      
           velpub = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
-       
           velmsg = Twist()
-       
           velmsg.linear.x = speed
-       
           velmsg.angular.z = angspeed
-       
           velpub.publish(velmsg)
-       
           endTime = rospy.Time.now() + rospy.Duration(t)
-       
           while rospy.Time.now() < endTime:
-       
               velpub.publish(velmsg)
-
       def on_press(key):
-
           return
-
       def on_release(key):
-
           if key == keyboard.KeyCode.from_char('w'):
-       
               pubVel(1, 0, 0.5)
            
           if key == keyboard.KeyCode.from_char('s'):
-       
               pubVel(-1, 0, 0.5)
            
           if key == keyboard.KeyCode.from_char('a'):
-       
               pubVel(0, -1, 0.5)
            
           if key == keyboard.KeyCode.from_char('d'):
-       
               pubVel(0, 1, 0.5)
            
           if key == keyboard.Key.space:
-       
                try:
                       # Wait for the service to be available
-                   
                       rospy.wait_for_service('/turtle1/teleport_relative')
-                   
                       # Create handle to call the service
-                   
                       giro = rospy.ServiceProxy('/turtle1/teleport_relative', TeleportRelative)
-                   
                       giro(0, pi)
-                   
                       rospy.loginfo('Turtle rotated')
-                   
+               
                except rospy.ServiceException as e:  # If the service is not available, print a warning
-            
                       rospy.logwarn("Service teleport_relative call failed")
                    
           if key == keyboard.KeyCode.from_char('r'):
-       
                try:
                       rospy.wait_for_service('/turtle1/teleport_absolute')
-                   
                       teleportOrigen = rospy.ServiceProxy('/turtle1/teleport_absolute', TeleportAbsolute)
-                   
                       Reset=teleportOrigen(5.5, 5.5, 0)
-
                       rospy.wait_for_service('/clear')  # Clear the trajectory
-                   
                       clearTrajec = rospy.ServiceProxy('/clear', Empty)
-                   
                       Reset = clearTrajec()
-
                       rospy.loginfo('Turtle reset')
-                   
                except rospy.ServiceException as e:
-            
                           rospy.logwarn("Service teleport_absolute call failed")
 
       with keyboard.Listener(on_press=on_press, on_release=on_release) as listener:
-
           listener.join()
 
 En la parte inicial del codigo se importan las librerias y funciones que usaremos a lo largo del programa, en esta seccion se destaca la siguiente instruccion from turtlesim.srv import TeleportAbsolute, TeleportRelative la cual importa los comandos de movimiento relativo y absoluto de la TurtleSim.
@@ -176,7 +127,7 @@ Para las teclas A,S,W y D se envia una instruccion de movimiento dependiendo de 
 Por otro lado, para R y ESPACIO se utiliza la funcion rospy.ServiceProxy con el respectivo movimiento a realizar, ya sea absoluto o relativo, cabe resaltar que se usa la funcion rospy.ServiceProxy('/clear', Empty) para limpiar Turtle1 cuando se presiona R.
 
 
-Conclusiones page_facing_up
+**Conclusiones**
 
     Es importante conocer diversas formas de realizar código para robótica, de esta forma se puede facilitar en gran medida la ejecución de diferentes aplicaciones dependiendo de la necesidad que se tenga.
     El framework ROS permite realizar diversas operaciones de una manera rápida y sencilla, por ello es importante reconocer su funcionamiento y herramientas disponibles.
@@ -184,4 +135,4 @@ Conclusiones page_facing_up
 
 Referencias book
 
-    Laboratorio 2 - Robotica de desarrollo - Intro a ROS UNAL.
+    Laboratorio 3 - Robotica de desarrollo, Intro a ROS UNAL.
