@@ -135,6 +135,6 @@ Por otro lado, para R y ESPACIO se utiliza la funcion rospy.ServiceProxy con el 
 2. El framework ROS permite realizar diversas operaciones de una manera rápida y sencilla, por ello es importante reconocer su funcionamiento y herramientas disponibles.
 3. El trabajo en equipo permite adquirir un mayor aprendizaje en el desarrollo de los ejercicios, ya que se genera discusión acerca de lo que se está realizando y cuál es la mejor manera de hacerlo.
 
-Referencias book
+**Referencias book**
 
-    Laboratorio 3 - Robotica de desarrollo, Intro a ROS UNAL.
+1. Laboratorio 3 - Robotica de desarrollo, Intro a ROS UNAL.
